@@ -4,12 +4,13 @@ import SignIn from "./pages/SignIn.tsx";
 import SignUp from "./pages/SignUp.tsx";
 import Profile from "./pages/Profile.tsx";
 import About from "./pages/About.tsx";
+import Header from "./components/Header.tsx";
 
 function App() {
 
   return (
       <BrowserRouter>
-
+        <Header/>
         <Routes>
           <Route path="/" element={<Home/>} />
           <Route path="/sign-in" element={<SignIn />} />
