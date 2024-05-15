@@ -7,3 +7,7 @@ npm i dotenv
 npm i bcryptjs
 npm i jsonwebtoken
 
+
+client
+
+npm install @reduxjs/toolkit react-redux
