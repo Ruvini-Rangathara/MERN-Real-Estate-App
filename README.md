@@ -5,4 +5,5 @@ npm i mongoose
 npm i express
 npm i dotenv
 npm i bcryptjs
+npm i jsonwebtoken
 
