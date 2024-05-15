@@ -12,3 +12,4 @@ client
 
 npm install @reduxjs/toolkit react-redux
 npm i redux-persist
+npm install firebase
