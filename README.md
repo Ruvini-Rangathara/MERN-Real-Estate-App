@@ -11,3 +11,4 @@ npm i jsonwebtoken
 client
 
 npm install @reduxjs/toolkit react-redux
+npm i redux-persist
