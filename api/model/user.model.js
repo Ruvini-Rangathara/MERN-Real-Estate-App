@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
     },
     avatar: {
         type: String,
-        default:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMApjZlivZ2eTJ91_6T3wMJbzzCN6tnWOBPg&usqp=CAU"
+        default:"https://static-00.iconduck.com/assets.00/profile-circle-icon-2048x2048-cqe5466q.png"
     },
 }, {timestamps: true});
 

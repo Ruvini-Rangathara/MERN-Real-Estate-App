@@ -47,7 +47,7 @@ export default function SignIn() {
             // setError(null);
 
             dispatch(signInSuccess(data));
-            navigate('/')
+            navigate('/about')
         }catch (e) {
             // setLoading(false);
             // setError(error.message);
