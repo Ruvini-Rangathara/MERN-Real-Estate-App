@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
 import { app } from "../firebase.js";
-import {updateUserStart, updateUserSuccess, updateUserFailure, deleteUserStart, deleteUserSuccess, deleteUserFailure} from "../redux/user/userSlice.js";
+import {updateUserStart, updateUserSuccess, updateUserFailure, deleteUserStart, deleteUserSuccess, deleteUserFailure, clearError} from "../redux/user/userSlice.js";
 import {useDispatch} from "react-redux";
 
 export default function Profile() {
@@ -23,6 +23,7 @@ export default function Profile() {
     const dispatch = useDispatch();
 
     useEffect(() => {
+        dispatch(clearError());
         if (file) {
             handleFileUpload(file);
         }
