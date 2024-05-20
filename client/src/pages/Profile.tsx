@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
 import { app } from "../firebase.js";
-import {updateUserStart, updateUserSuccess, updateUserFailure, deleteUserStart, deleteUserSuccess, deleteUserFailure, clearError} from "../redux/user/userSlice.js";
+import {updateUserStart, updateUserSuccess, updateUserFailure, deleteUserStart, deleteUserSuccess, deleteUserFailure, signOutStart, signOutSuccess, signOutFailure, clearError} from "../redux/user/userSlice.js";
 import {useDispatch} from "react-redux";
 
 export default function Profile() {
@@ -107,6 +107,26 @@ export default function Profile() {
         }
     };
 
+    const handleSignOut = async () => {
+        try{
+            dispatch(signOutStart());
+            const res = await fetch(`/api/auth/signout`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            const data = await res.json();
+            if (data.success === false) {
+                dispatch(signOutFailure(data.message));
+                return;
+            }
+            dispatch(signOutSuccess(data));
+        }catch (e){
+            dispatch(signOutFailure(e.message));
+        }
+    };
+
     return (
         <div className={'p-3 max-w-lg mx-auto'}>
             <h1 className={'text-3xl font-semibold text-center my-7'}>Profile</h1>
@@ -175,7 +195,7 @@ export default function Profile() {
 
             <div className={'flex justify-between mt-5'}>
                 <span onClick={handleDeleteUser} className={'text-red-700 cursor-pointer'}>Delete Account</span>
-                <span className={'text-red-700 cursor-pointer'}>Sign Out</span>
+                <span onClick={handleSignOut} className={'text-red-700 cursor-pointer'}>Sign Out</span>
             </div>
 
             {error && <p className={'text-red-500'}>{error}</p>}
