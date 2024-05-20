@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import userRoute from "./route/user.route.js";
 import authRoute from "./route/auth.route.js";
 import cookieParser from 'cookie-parser';
+import listingRoute from "./route/listing.route.js";
 
 const app = express();
 app.use(express.json());
@@ -22,7 +23,7 @@ app.listen(3000, () => {
 
 app.use('/api/user', userRoute)
 app.use('/api/auth', authRoute)
-
+app.use('/api/listing', listingRoute)
 
 
 // Error handling middleware (should be placed in the end)
