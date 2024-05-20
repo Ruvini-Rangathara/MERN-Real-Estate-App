@@ -8,6 +8,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import Home from "./pages/Home.tsx";
 import {useEffect} from "react";
 import {useSelector} from "react-redux";
+import CreateListing from "./pages/CreateListing.tsx";
 
 function App() {
     const currentUser = useSelector((state) => state.user.currentUser);
@@ -30,6 +31,7 @@ function App() {
 
             <Route element={<PrivateRoute />} >
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/create-listing" element={<CreateListing />} />
             </Route>
 
             <Route path="*" element={<Navigate to="/sign-in" />} />

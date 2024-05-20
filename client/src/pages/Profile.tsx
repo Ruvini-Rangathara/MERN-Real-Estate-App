@@ -4,6 +4,7 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/
 import { app } from "../firebase.js";
 import {updateUserStart, updateUserSuccess, updateUserFailure, deleteUserStart, deleteUserSuccess, deleteUserFailure, signOutStart, signOutSuccess, signOutFailure, clearError} from "../redux/user/userSlice.js";
 import {useDispatch} from "react-redux";
+import {Link} from "react-router-dom";
 
 export default function Profile() {
     const fileRef = useRef(null);
@@ -191,6 +192,12 @@ export default function Profile() {
                     className={'bg-slate-700 text-white rounded-lg p-2 uppercase hover:opacity-95 disabled:opacity-80'}>
                     {loading ? "Loading..." : "Update"}
                 </button>
+
+                <Link
+                    className={'bg-green-700 text-center text-white p-2 rounded-lg uppercase hover:opacity-95'}
+                    to={'/create-listing'}>
+                    Create Listing
+                </Link>
             </form>
 
             <div className={'flex justify-between mt-5'}>
