@@ -156,7 +156,7 @@ export default function UpdateListing() {
             }
             console.log("data : ", data)
             console.log("data._id : ", data._id)
-            navigate(`/api/listing/${data._id}`)
+            navigate(`/listing/${data._id}`)
         }catch (e) {
             setError(e.message)
             setLoading(false)
