@@ -9,6 +9,7 @@ import Home from "./pages/Home.tsx";
 import {useEffect} from "react";
 import {useSelector} from "react-redux";
 import CreateListing from "./pages/CreateListing.tsx";
+import UpdateListing from "./pages/UpdateListing.tsx";
 
 function App() {
     const currentUser = useSelector((state) => state.user.currentUser);
@@ -32,6 +33,7 @@ function App() {
             <Route element={<PrivateRoute />} >
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/create-listing" element={<CreateListing />} />
+                <Route path="/update-listing/:listingId" element={<UpdateListing />} />
             </Route>
 
             <Route path="*" element={<Navigate to="/sign-in" />} />
