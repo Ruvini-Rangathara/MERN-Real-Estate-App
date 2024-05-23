@@ -33,7 +33,6 @@ export default function UpdateListing() {
             const listingId = params.listingId;
             const res = await fetch(`/api/listing/get/${listingId}`);
             const data = await res.json();
-            console.log("data in update listing : ", data)
             if(data.success === false) {
                 setError(data.message)
                 return
@@ -89,7 +88,6 @@ export default function UpdateListing() {
             uploadTask.on('state_changed',
                 (snapshot) => {
                     const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    console.log('Upload is ' + progress + '% done');
                 },
                 (error) => {
                     reject(error);},
@@ -154,8 +152,6 @@ export default function UpdateListing() {
                 setError(data.message)
                 return
             }
-            console.log("data : ", data)
-            console.log("data._id : ", data._id)
             navigate(`/listing/${data._id}`)
         }catch (e) {
             setError(e.message)
@@ -172,8 +168,8 @@ export default function UpdateListing() {
                            placeholder={'Name'}
                            className={'border p-2 rounded-lg'}
                            id={'name'}
-                           maxLength={'62'}
-                           minLength={'10'}
+                           maxLength={62}
+                           minLength={10}
                            required
                            onChange={handleChange}
                            value={formData.name}
@@ -203,7 +199,7 @@ export default function UpdateListing() {
                                 onChange={handleChange}
                                 checked={formData.type === 'sale'}
                             />
-                            <span>Sell</span>
+                            <span>Sale</span>
                         </div>
                         <div className={'flex gap-2'}>
                             <input

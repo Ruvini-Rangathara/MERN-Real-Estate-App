@@ -52,13 +52,13 @@ export default function Home() {
     return (
         <div>
         {/*    top*/}
-            <div className={'flex flex-col gap-6 p-20 px-3 max-w-6xl '}>
+            <div className={'flex flex-col gap-6 px-20 py-8 max-w-6xl '}>
                 <h1 className={'text-slate-700 font-bold text-3xl lg:text-6xl'}>Find your next
-                    <span className={'text-slate-500'}>perfect</span>
+                    <span className={'text-slate-500'}> perfect</span>
                     <br/>place with ease
                 </h1>
                 <div className={'text-gray-400 text-xs sm:text-sm'}>
-                    Ruu Estate is the best place to find your next perfect place to
+                    Dream Home Real Estate is the best place to find your next perfect place to
                     live.
                     <br />
                     We have a wide range of properties for you to choose from.
@@ -68,7 +68,7 @@ export default function Home() {
                 </Link>
             </div>
 
-        {/*    swiper*/}
+            {/*swiper*/}
             <Swiper navigation>
                 {offerListings && offerListings.length > 0 && offerListings.map((listing) => (
                     <SwiperSlide  key={listing._id}>
@@ -79,7 +79,7 @@ export default function Home() {
                                 backgroundRepeat: 'no-repeat',
                                 backgroundSize: 'cover'
                             }}
-                            className={'h-[500px]'}
+                            className={'h-[500px] w-[1200px] mx-auto'}
                         >
                         </div>
                     </SwiperSlide>
