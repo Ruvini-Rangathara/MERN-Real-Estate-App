@@ -195,11 +195,10 @@ export default function Search() {
                         </p>
                     )}
 
-                    {!loading &&
-                        listings &&
-                        listings.map((listing) => (
-                            <ListingItem key={listing._id} listing={listing}/>
-                        ))}
+                    {!loading && listings && listings.map((listing) => (
+                            <ListingItem listing={listing} key={listing._id} />
+                        )
+                    )}
 
                     {showMore && (
                         <button

@@ -5,3 +5,12 @@
 body{
     background-color: rgb(241, 245, 241);
 }
+
+::-webkit-scrollbar {
+    width: 0;
+    background-color: transparent;
+}
+
+html {
+    scroll-behavior: smooth;
+}
