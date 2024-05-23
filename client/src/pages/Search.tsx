@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import { useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import ListingItem from "../components/ListingItem.tsx";
 
 export default function Search() {
@@ -17,8 +17,7 @@ export default function Search() {
 
     const [loading, setLoading] = useState(true);
     const [listings, setListings] = useState([]);
-
-    console.log("listings : ", listings);
+    const [showMore, setShowMore] = useState(false);
 
     useEffect(() => {
         const urlParams = new URLSearchParams(location.search);
@@ -48,12 +47,17 @@ export default function Search() {
         //we can not use async function in useEffect, so we will create an async function and call it inside useEffect
             const fetchListings = async () => {
                 setLoading(true);
+                setShowMore(false);
                 const searchQuery = urlParams.toString();
                 const res = await fetch(`/api/listing/get?${searchQuery}`);
                 const data = await res.json();
+                if(data.length > 8){
+                    setShowMore(true);
+                }else {
+                    setShowMore(false);
+                }
                 setListings(data);
                 setLoading(false);
-
             }
             fetchListings().then(r => console.log());
         }, [location.search]);
@@ -90,6 +94,20 @@ export default function Search() {
         const searchQuery = urlParams.toString();
 
         navigate(`/search?${searchQuery}`);
+    }
+
+    const onShowMoreClick = async () => {
+        const startIndex = listings.length;
+        const urlParams = new URLSearchParams(location.search);
+        urlParams.set('startIndex', String(startIndex));
+        const searchQuery = urlParams.toString();
+        const res = await fetch(`/api/listing/get?${searchQuery}`);
+        const data = await res.json();
+
+        if(data.length < 9){
+            setShowMore(false);
+        }
+        setListings([...listings, ...data])
     }
 
     return (
@@ -182,6 +200,15 @@ export default function Search() {
                         listings.map((listing) => (
                             <ListingItem key={listing._id} listing={listing}/>
                         ))}
+
+                    {showMore && (
+                        <button
+                            onClick={onShowMoreClick}
+                            className='p-7 text-green-700 hover:underline text-center w-full'
+                        >
+                            Show More
+                        </button>
+                    )}
                 </div>
             </div>
         </div>
