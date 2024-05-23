@@ -16,3 +16,7 @@ npm i redux-persist
 npm install firebase
 npm i swiper
 
+
+npm install -D @tailwindcss/line-clamp
+official site - https://github.com/tailwindlabs/tailwindcss-line-clamp
+
