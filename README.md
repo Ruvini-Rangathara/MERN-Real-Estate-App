@@ -134,7 +134,7 @@ official site - https://github.com/tailwindlabs/tailwindcss-line-clamp
 To deploy the application on Render or any other platform, follow the platform-specific deployment instructions.
 
 
-The application is deployed on Render and can be accessed at [https://my-mern-estate.onrender.com/](https://my-mern-estate.onrender.com/).
+The application is deployed on Render and can be accessed at [https://dream-home-pew6.onrender.com](https://dream-home-pew6.onrender.com).
 
 ---
 
