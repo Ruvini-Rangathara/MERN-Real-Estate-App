@@ -1,17 +1,17 @@
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
-import SignIn from "./pages/SignIn.tsx";
-import SignUp from "./pages/SignUp.tsx";
-import Profile from "./pages/Profile.tsx";
-import About from "./pages/About.tsx";
-import Header from "./components/Header.tsx";
-import PrivateRoute from "./components/PrivateRoute";
-import Home from "./pages/Home.tsx";
+import SignIn from "./pages/SignIn.jsx";
+import SignUp from "./pages/SignUp.jsx";
+import Profile from "./pages/Profile.jsx";
+import About from "./pages/About.jsx";
+import Header from "./components/Header.jsx";
+import PrivateRoute from "./components/PrivateRoute.jsx";
+import Home from "./pages/Home.jsx";
 import {useEffect} from "react";
 import {useSelector} from "react-redux";
-import CreateListing from "./pages/CreateListing.tsx";
-import UpdateListing from "./pages/UpdateListing.tsx";
-import Listing from "./pages/Listing.tsx";
-import Search from "./pages/Search.tsx";
+import CreateListing from "./pages/CreateListing.jsx";
+import UpdateListing from "./pages/UpdateListing.jsx";
+import Listing from "./pages/Listing.jsx";
+import Search from "./pages/Search.jsx";
 
 function App() {
     const currentUser = useSelector((state) => state.user.currentUser);
