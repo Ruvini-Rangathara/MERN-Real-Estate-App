@@ -52,7 +52,7 @@ export default function Home() {
     return (
         <div>
         {/*    top*/}
-            <div className={'flex flex-col gap-6 px-20 py-8 max-w-6xl '}>
+            <div className={'flex flex-col gap-6 p-28 px-20 py-16 max-w-6xl '}>
                 <h1 className={'text-slate-700 font-bold text-3xl lg:text-6xl'}>Find your next
                     <span className={'text-slate-500'}> perfect</span>
                     <br/>place with ease
@@ -79,7 +79,7 @@ export default function Home() {
                                 backgroundRepeat: 'no-repeat',
                                 backgroundSize: 'cover'
                             }}
-                            className={'h-[500px] w-[1200px] mx-auto'}
+                            className={'h-[500px] mx-auto'}
                         >
                         </div>
                     </SwiperSlide>
