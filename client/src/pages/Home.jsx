@@ -19,7 +19,7 @@ export default function Home() {
                 const res = await fetch('/api/listing/get?offer=true&limit=4');
                 const data = await res.json();
                 setOfferListings(data);
-                fetchRentListings().then(r => console.log());
+                fetchRentListings().then(r => console.log(r));
             }catch (e) {
                 console.log(e)
             }
@@ -30,7 +30,7 @@ export default function Home() {
                 const res = await fetch('/api/listing/get?type=rent&limit=4');
                 const data = await res.json();
                 setRentListings(data);
-                fetchSaleListings().then(r => console.log());
+                fetchSaleListings().then(r => console.log(r));
             }catch (e) {
                 console.log(e)
             }
@@ -46,7 +46,7 @@ export default function Home() {
             }
         }
 
-        fetchOfferListings().then(r => console.log());
+        fetchOfferListings().then(r => console.log(r));
     }, []);
 
     return (

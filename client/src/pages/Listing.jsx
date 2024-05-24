@@ -37,7 +37,7 @@ export default function Listing() {
                 setLoading(false)
             }
         }
-        fetchListing().then(r => console.log());
+        fetchListing().then(r => console.log(r));
     }, [params.listingId]);
 
     return (
@@ -65,7 +65,7 @@ export default function Listing() {
                     <div className={'fixed top-[13%] right-[3%] z-10 border rounded-full w-8 h-8 flex justify-center items-center bg-slate-100 cursor-pointer'}>
                         <FaShare className={'text-slate-500'}
                             onClick={() => {
-                                navigator.clipboard.writeText(window.location.href).then(r => console.log());
+                                navigator.clipboard.writeText(window.location.href).then(r => console.log(r));
                                 setCopied(true);
                                 setTimeout(() => {
                                     setCopied(false);

@@ -5,7 +5,7 @@ import {useSelector} from "react-redux";
 
 export default function Header() {
     const navigate = useNavigate();
-    const currentUser = useSelector((state: any) => state.user.currentUser);
+    const currentUser = useSelector((state) => state.user.currentUser);
     const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
@@ -14,7 +14,7 @@ export default function Header() {
         }
     }, [currentUser]);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         const urlParams = new URLSearchParams(window.location.search);
         urlParams.set('searchTerm', searchTerm);

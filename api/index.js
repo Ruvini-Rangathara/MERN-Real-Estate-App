@@ -7,9 +7,12 @@ import cookieParser from 'cookie-parser';
 import listingRoute from "./route/listing.route.js";
 import path from "path";
 
-mongoose.connect(process.env.MONGO).then(r => {
-    console.log('Connected to MongoDB!!');
+dotenv.config();
+
+mongoose.connect(process.env.MONGO).then(() => {
+    console.log('Connected to MongoDB!! : ');
 }).catch(e => {
+    console.log("uri : ",process.env.MONGO)
     console.log('Error connecting to MongoDB!! Error: ', e);
 })
 
@@ -18,7 +21,6 @@ const __dirname = path.resolve();
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
-dotenv.config();
 
 app.listen(3000, () => {
     console.log('Server is running on port 3000!!');

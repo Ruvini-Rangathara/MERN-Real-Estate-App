@@ -59,10 +59,10 @@ export default function Search() {
                 setListings(data);
                 setLoading(false);
             }
-            fetchListings().then(r => console.log());
+            fetchListings().then(r => console.log(r));
         }, [location.search]);
 
-    const handleChange = (e: any) => {
+    const handleChange = (e) => {
         e.preventDefault();
         if(e.target.id === 'all' || e.target.id === 'rent' || e.target.id === 'sale') {
             setSidebarData({...sidebarData, type: e.target.id})
@@ -80,7 +80,7 @@ export default function Search() {
         }
     }
 
-    const handleSubmit = (e: any) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         const urlParams = new URLSearchParams();
         urlParams.set('searchTerm', sidebarData.searchTerm);

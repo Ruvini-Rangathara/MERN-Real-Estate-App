@@ -15,14 +15,14 @@ export default function SignIn() {
 
     const {error, loading} = useSelector(state => state.user);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e) => {
         setFormData({
             ...formData,
             [e.target.id]: e.target.value
         })
     }
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         try{
             // setLoading(true);

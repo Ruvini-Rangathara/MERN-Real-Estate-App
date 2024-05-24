@@ -41,6 +41,7 @@ export default function CreateListing() {
                 setImageUploadError(false);
                 setUploading(false);
             }).catch((error) => {
+                console.log(error)
                 setImageUploadError('Image upload failed (2 mb max per image)')
                 setUploading(false);
             })
@@ -60,6 +61,7 @@ export default function CreateListing() {
             uploadTask.on('state_changed',
                 (snapshot) => {
                     const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log('Upload is ' + progress + '% done');
                 },
                 (error) => {
                 reject(error);},
