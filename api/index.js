@@ -9,40 +9,52 @@ import path from "path";
 
 dotenv.config();
 
-mongoose.connect(process.env.MONGO).then(() => {
-    console.log('Connected to MongoDB!! : ');
-}).catch(e => {
-    console.log("uri : ",process.env.MONGO)
-    console.log('Error connecting to MongoDB!! Error: ', e);
-})
-
-const __dirname = path.resolve();
-
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
-app.listen(3000, () => {
-    console.log('Server is running on port 3000!!');
+const __dirname = path.resolve();
+
+// Database Connection
+mongoose.connect(process.env.MONGO, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 30000, // 30 seconds timeout
+    socketTimeoutMS: 45000 // 45 seconds timeout
+}).then(() => {
+    console.log('Connected to MongoDB!!');
+}).catch(e => {
+    console.error("Error connecting to MongoDB!!");
+    console.error("URI: ", process.env.MONGO);
+    console.error('Error: ', e.message);
 });
 
-app.use('/api/user', userRoute)
-app.use('/api/auth', authRoute)
-app.use('/api/listing', listingRoute)
+// Routes
+app.use('/api/user', userRoute);
+app.use('/api/auth', authRoute);
+app.use('/api/listing', listingRoute);
 
-app.use(express.static(path.join(__dirname, '/client/dist')));
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, 'client', 'dist')));
 
+// The "catchall" handler: for any request that doesn't match one above, send back React's index.html file.
 app.get('*', (req, res) => {
-   res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
+    res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
 });
 
-// Error handling middleware (should be placed in the end)
+// Error handling middleware (should be placed at the end)
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;
     const message = err.message || 'Internal Server Error!';
-    return res.status(statusCode).json({
+    res.status(statusCode).json({
         success: false,
         statusCode,
         message
     });
+});
+
+// Start the server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}!!`);
 });
