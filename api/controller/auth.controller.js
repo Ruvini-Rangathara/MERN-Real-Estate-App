@@ -13,6 +13,7 @@ export const signup = async (req, res, next) => {
         await newUser.save();
         res.status(201).json('User created successfully!!');
     }catch(e){
+        console.error(e.message)
         //manual error handling
         // next(errorHandler(550, 'Error creating user!!'));
 
@@ -41,6 +42,7 @@ export const signin = async (req, res, next) => {
         res.cookie('access_token', token, {httpOnly:true}).status(200).json(rest);
 
     }catch (e) {
+        console.error(e.message)
         next(e);
     }
 }
@@ -77,8 +79,8 @@ export const google = async (req, res, next) => {
                 .json(rest);
         }
     }catch (e) {
-        next(e);
         console.error(e.message)
+        next(e);
     }
 }
 
@@ -88,6 +90,7 @@ export const signout = async (req, res, next) => {
         res.clearCookie('access_token');
         res.status(200).json('User has been signed out...');
     }catch (e) {
+        console.error(e.message)
         next(e)
     }
 }

@@ -24,6 +24,7 @@ export const updateUser = async (req, res, next) => {
         const {password, ...rest} = updatedUser._doc;
         res.status(200).json(rest);
     }catch (e) {
+        console.error(e.message)
         next(e)
     }
 }
@@ -38,6 +39,7 @@ export const deleteUser = async (req, res, next) => {
         res.clearCookie('access_token');
         res.status(200).json('User has been deleted...');
     }catch (e) {
+        console.error(e.message)
         next(e)
     }
 }
@@ -48,6 +50,7 @@ export const getUserListings = async (req, res, next) => {
             const listings = await Listing.find({userRef: req.params.id});
             res.status(200).json(listings);
         }catch (e) {
+            console.error(e.message)
             next(e);
         }
     }else {
@@ -62,6 +65,7 @@ export const getUser = async (req, res, next) => {
         const {password:pass, ...rest} = user._doc;
         res.status(200).json(rest);
     }catch (e) {
+        console.error(e.message)
         next(e);
     }
 }

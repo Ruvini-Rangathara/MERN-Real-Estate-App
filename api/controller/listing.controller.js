@@ -6,7 +6,7 @@ export const createListing = async (req, res, next) => {
         const listing =  await Listing.create(req.body);
         res.status(201).json(listing);
     }catch (e) {
-
+        console.error(e.message)
     }
 }
 
@@ -23,6 +23,7 @@ export const deleteListing = async (req, res, next) => {
         await Listing.findByIdAndDelete(req.params.id);
         res.status(200).json({message: "Listing deleted"});
     }catch (e) {
+        console.error(e.message)
         next(e);
     }
 }
@@ -40,6 +41,7 @@ export const updateListing = async (req, res, next) => {
         const updatedListing = await Listing.findByIdAndUpdate(req.params.id, req.body, {new: true});
         res.status(200).json(updatedListing);
     }catch (e) {
+        console.error(e.message)
         next(e);
     }
 }
@@ -52,6 +54,7 @@ export const getListing = async (req, res, next) => {
         }
         res.status(200).json(listing);
     }catch (e) {
+        console.error(e.message)
         next(e);
     }
 }
@@ -100,8 +103,8 @@ export const getListings = async (req, res, next) => {
             .limit(limit).skip(startIndex);
 
         return res.status(200).json(listings);
-
     }catch (e) {
+        console.error(e.message)
         next(e);
     }
 }
