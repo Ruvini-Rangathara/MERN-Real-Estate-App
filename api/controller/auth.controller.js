@@ -78,6 +78,7 @@ export const google = async (req, res, next) => {
         }
     }catch (e) {
         next(e);
+        console.error(e.message)
     }
 }
 
