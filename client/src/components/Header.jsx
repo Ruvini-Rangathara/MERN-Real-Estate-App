@@ -10,6 +10,7 @@ export default function Header() {
 
     useEffect(() => {
         if (currentUser) {
+            console.log("current user : ", currentUser);
             console.log("User avatar link:", currentUser.avatar);
         }
     }, [currentUser]);
