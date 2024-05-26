@@ -5,7 +5,7 @@ import {useSelector} from "react-redux";
 
 export default function Header() {
     const navigate = useNavigate();
-    const currentUser = useSelector((state) => state.user);
+    const currentUser = useSelector((state) => state.user.currentUser);
     const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
