@@ -5,6 +5,8 @@ import { app } from "../firebase.js";
 import {updateUserStart, updateUserSuccess, updateUserFailure, deleteUserStart, deleteUserSuccess, deleteUserFailure, signOutStart, signOutSuccess, signOutFailure, clearError} from "../redux/user/userSlice.js";
 import {useDispatch} from "react-redux";
 import {Link} from "react-router-dom";
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 export default function Profile() {
     const fileRef = useRef(null);
@@ -69,100 +71,203 @@ export default function Profile() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try{
+        try {
             dispatch(updateUserStart());
-            const res = await fetch(`/api/user/update/${currentUser._id}`, {
-                method: "POST",
-                body: JSON.stringify(formData),
+            const res = await axios.post(`/api/user/update/${currentUser._id}`, formData, {
                 headers: {
                     "Content-Type": "application/json",
                 },
             });
-            const data = await res.json();
+            const data = res.data;
             if (data.success === false) {
                 dispatch(updateUserFailure(data.message));
-                return
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: data.message,
+                });
+                return;
             }
             dispatch(updateUserSuccess(data));
+            await Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: 'User updated successfully!',
+            });
             setUpdateSuccess(true);
-        }catch (e){
+        } catch (e) {
             dispatch(updateUserFailure(e.message));
+            await Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Failed to update user!',
+            });
         }
     };
 
     const handleDeleteUser = async () => {
-        try{
+        // Show confirmation dialog
+        const confirmResult = await Swal.fire({
+            icon: 'warning',
+            title: 'Are you sure?',
+            text: 'You are about to delete this user. This action cannot be undone!',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!',
+        });
+
+        if (!confirmResult.isConfirmed) {
+            return; // User canceled the deletion
+        }
+
+        try {
             dispatch(deleteUserStart());
-            const res = await fetch(`/api/user/delete/${currentUser._id}`, {
-                method: "DELETE",
+            const res = await axios.delete(`/api/user/delete/${currentUser._id}`, {
                 headers: {
                     "Content-Type": "application/json",
                 },
             });
-            const data = await res.json();
+            const data = res.data;
             if (data.success === false) {
                 dispatch(deleteUserFailure(data.message));
-                return
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: data.message,
+                });
+                return;
             }
             dispatch(deleteUserSuccess(data));
-        }catch (e){
+            await Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: 'User deleted successfully!',
+            });
+        } catch (e) {
             dispatch(deleteUserFailure(e.message));
+            await Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Failed to delete user!',
+            });
         }
     };
 
     const handleSignOut = async () => {
-        try{
+        // Show confirmation dialog
+        const confirmResult = await Swal.fire({
+            icon: 'warning',
+            title: 'Are you sure?',
+            text: 'Do you want to sign out?',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, sign me out!',
+        });
+
+        if (!confirmResult.isConfirmed) {
+            return; // User canceled the sign-out
+        }
+
+        try {
             dispatch(signOutStart());
-            const res = await fetch(`/api/auth/signout`, {
-                method: "POST",
+            const res = await axios.post(`/api/auth/signout`, {}, {
                 headers: {
                     "Content-Type": "application/json",
                 },
             });
-            const data = await res.json();
+            const data = res.data;
             if (data.success === false) {
                 dispatch(signOutFailure(data.message));
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: data.message,
+                });
                 return;
             }
             dispatch(signOutSuccess(data));
-        }catch (e){
+        } catch (e) {
+            console.log("signout error : ",e.message)
             dispatch(signOutFailure(e.message));
+            await Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Something went wrong!',
+            });
         }
     };
 
     const handleShowListings = async () => {
-        try{
-            setShowListingsError(false)
-            const res = await fetch(`/api/user/listings/${currentUser._id}`);
-            const data = await res.json();
+        try {
+            setShowListingsError(false);
+            const res = await axios.get(`/api/user/listings/${currentUser._id}`);
+            const data = res.data;
             if (data.success === false) {
                 setShowListingsError(true);
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Failed to fetch user listings!',
+                });
                 return;
             }
             setUserListings(data);
-        }catch (e){
-            setShowListingsError(e.message);
+        } catch (e) {
+            setShowListingsError(true);
+            await Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Failed to fetch user listings!',
+            });
         }
-    }
+    };
 
     const handleListingDelete = async (listingId) => {
-        try{
-            const res = await fetch(`/api/listing/delete/${listingId}`, {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-            const data = await res.json();
-            if (data.success === false) {
-                console.log(data.message);
-                return;
+        // Show confirmation dialog
+        const confirmResult = await Swal.fire({
+            title: 'Are you sure?',
+            text: 'You will not be able to recover this listing!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, cancel',
+            reverseButtons: true
+        });
+
+        // If the user confirms deletion
+        if (confirmResult.isConfirmed) {
+            try {
+                const res = await axios.delete(`/api/listing/delete/${listingId}`);
+                const data = res.data;
+                if (data.success === false) {
+                    console.log(data.message);
+                    await Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: data.message || 'Failed to delete listing!',
+                    });
+                    return;
+                }
+                setUserListings((prev) => prev.filter((listing) => listing._id !== listingId));
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Deleted!',
+                    text: 'Your listing has been deleted.',
+                });
+            } catch (e) {
+                console.log(e.message);
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Failed to delete listing!',
+                });
             }
-            setUserListings((prev) => prev.filter((listing) => listing._id !== listingId));
-        }catch (e){
-            console.log(e.message);
         }
-    }
+    };
+
+
     return (
         <div className={'p-3 max-w-lg mx-auto'}>
             <h1 className={'text-3xl font-semibold text-center my-7'}>Profile</h1>

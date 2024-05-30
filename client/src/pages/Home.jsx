@@ -5,6 +5,7 @@ import 'swiper/css/bundle';
 import SwiperCore from "swiper";
 import {Navigation} from "swiper/modules";
 import ListingItem from "../components/ListingItem.jsx";
+import axios from "axios";
 
 export default function Home() {
     const [offerListings, setOfferListings] = React.useState([]);
@@ -15,44 +16,42 @@ export default function Home() {
 
     useEffect(() => {
         const fetchOfferListings = async () => {
-            try{
-                const res = await fetch('/api/listing/get?offer=true&limit=4');
-                const data = await res.json();
-                setOfferListings(data);
-                fetchRentListings().then(r => console.log(r));
-            }catch (e) {
-                console.log(e)
+            try {
+                const res = await axios.get('/api/listing/get', { params: { offer: true, limit: 4 } });
+                setOfferListings(res.data);
+            } catch (error) {
+                console.error('Error fetching offer listings:', error);
             }
-        }
+        };
 
         const fetchRentListings = async () => {
-            try{
-                const res = await fetch('/api/listing/get?type=rent&limit=4');
-                const data = await res.json();
-                setRentListings(data);
-                fetchSaleListings().then(r => console.log(r));
-            }catch (e) {
-                console.log(e)
+            try {
+                const res = await axios.get('/api/listing/get', { params: { type: 'rent', limit: 4 } });
+                setRentListings(res.data);
+            } catch (error) {
+                console.error('Error fetching rent listings:', error);
             }
-        }
+        };
 
         const fetchSaleListings = async () => {
-            try{
-                const res = await fetch('/api/listing/get?type=sale&limit=4');
-                const data = await res.json();
-                setSaleListings(data);
-            }catch (e) {
-                console.log(e)
+            try {
+                const res = await axios.get('/api/listing/get', { params: { type: 'sale', limit: 4 } });
+                setSaleListings(res.data);
+            } catch (error) {
+                console.error('Error fetching sale listings:', error);
             }
-        }
+        };
 
-        fetchOfferListings().then(r => console.log(r));
+        Promise.all([fetchOfferListings(), fetchRentListings(), fetchSaleListings()])
+            .then(() => console.log('All listings fetched successfully'))
+            .catch((error) => console.error('Error fetching listings:', error));
     }, []);
+
 
     return (
         <div>
         {/*    top*/}
-            <div className={'flex flex-col gap-6 p-28 px-20 py-16 max-w-6xl '}>
+            <div className={'flex flex-col gap-6 p-20 py-16 max-w-6xl '}>
                 <h1 className={'text-slate-700 font-bold text-3xl lg:text-6xl'}>Find your next
                     <span className={'text-slate-500'}> perfect</span>
                     <br/>place with ease
@@ -87,7 +86,7 @@ export default function Home() {
             </Swiper>
 
         {/*    listing results for offer, sale and rent*/}
-            <div className={'max-w-6xl mx-auto p-3 flex flex-col gap-8 my-10 '}>
+            <div className={'max-w-6xl mx-auto flex flex-col gap-8 my-10 '}>
                 {/*///////////////////////////////////////////////////////////////////////*/}
                 {offerListings && offerListings.length > 0 && (
                     <div className={''}>
@@ -99,7 +98,7 @@ export default function Home() {
                                 Show more offers...
                             </Link>
                         </div>
-                        <div className={'flex flex-wrap gap-4'}>
+                        <div className={'flex flex-wrap'}>
                             {
                                 offerListings.map((listing) => (
                                     <ListingItem listing={listing} key={listing._id}/>
@@ -120,7 +119,7 @@ export default function Home() {
                                 Show more places...
                             </Link>
                         </div>
-                        <div className={'flex flex-wrap gap-4'}>
+                        <div className={'flex flex-wrap'}>
                             {
                                 rentListings.map((listing) => (
                                     <ListingItem listing={listing} key={listing._id}/>
@@ -141,7 +140,7 @@ export default function Home() {
                                 Show more places...
                             </Link>
                         </div>
-                        <div className={'flex flex-wrap gap-4'}>
+                        <div className={'flex flex-wrap'}>
                             {
                                 saleListings.map((listing) => (
                                     <ListingItem listing={listing} key={listing._id}/>

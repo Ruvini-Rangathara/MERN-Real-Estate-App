@@ -3,6 +3,8 @@ import {getDownloadURL, getStorage, ref, uploadBytesResumable} from "firebase/st
 import {app} from "../firebase.js";
 import {useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 export default function CreateListing() {
     const navigate = useNavigate();
@@ -95,42 +97,56 @@ export default function CreateListing() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try{
+        try {
             if (formData.imageUrls.length < 1) {
-                setError('Please upload at least one image')
-                return
+                setError('Please upload at least one image');
+                return;
             }
-            if (formData.regularPrice < formData.discountPrice){
-                setError('Discount price must be less than regular price')
-                return
+            if (formData.regularPrice < formData.discountPrice) {
+                setError('Discount price must be less than regular price');
+                return;
             }
-            setLoading(true)
-            setError(false)
-            const res = await fetch('/api/listing/create', {
-                method: 'POST',
+            setLoading(true);
+            setError(false);
+
+            const response = await axios.post('/api/listing/create', {
+                ...formData,
+                userRef: currentUser._id
+            }, {
                 headers: {
                     'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(
-                    {
-                        ...formData,
-                        userRef: currentUser._id
-                    }
-                )
+                }
             });
-            const data = await res.json();
-            setLoading(false)
 
-            if(data.success === false) {
-                setError(data.message)
-                return
+            const data = response.data;
+            setLoading(false);
+
+            if (data.success === false) {
+                setError(data.message);
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: data.message
+                });
+                return;
             }
-            navigate(`/listing/${data._id}`)
-        }catch (e) {
-            setError(e.message)
-            setLoading(false)
+
+            await Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: 'Listing created successfully!'
+            });
+            navigate(`/listing/${data._id}`);
+        } catch (error) {
+            setError(error.message);
+            setLoading(false);
+            await Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: error.message
+            });
         }
-    }
+    };
 
     return (
         <main className={'p-3 max-w-4xl mx-auto'}>

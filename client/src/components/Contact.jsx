@@ -1,23 +1,52 @@
 import {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 export default function Contact({listing}) {
     const [landlord, setLandlord] = useState(null);
     const [message, setMessage] = useState('');
 
+    // useEffect(() => {
+    //     const fetchLandlord = async () => {
+    //         try {
+    //             const response = await fetch(`/api/user/${listing.userRef}`);
+    //             const data = await response.json();
+    //             if (data.success === false) {
+    //                 return;
+    //             }
+    //             setLandlord(data);
+    //         } catch (error) {
+    //             console.error(error);
+    //         }
+    //     }
+    //     fetchLandlord().then(r => console.log(r));
+    // }, [listing.userRef]);
+
+
     useEffect(() => {
         const fetchLandlord = async () => {
             try {
-                const response = await fetch(`/api/user/${listing.userRef}`);
-                const data = await response.json();
+                const response = await axios.get(`/api/user/${listing.userRef}`);
+                const data = response.data;
                 if (data.success === false) {
+                    await Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Failed to fetch landlord data!',
+                    });
                     return;
                 }
                 setLandlord(data);
             } catch (error) {
                 console.error(error);
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'An error occurred while fetching landlord data!',
+                });
             }
-        }
+        };
         fetchLandlord().then(r => console.log(r));
     }, [listing.userRef]);
 

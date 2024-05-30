@@ -1,6 +1,8 @@
 import React from "react";
 import {Link, useNavigate} from "react-router-dom";
 import OAuth from "../components/OAuth.jsx";
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 export default function SignUp() {
     const navigate = useNavigate();
@@ -17,29 +19,42 @@ export default function SignUp() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try{
+        try {
             setLoading(true);
-            const res = await fetch('/api/auth/signup', {
-                method: 'POST',
+            const response = await axios.post('/api/auth/signup', formData, {
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(formData)
             });
-            const data = await res.json();
+            const data = response.data;
             if (data.success === false) {
                 setError(data.message);
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Sign Up Failed',
+                    text: data.message,
+                });
                 setLoading(false);
                 return;
             }
-            setLoading(false)
+            setLoading(false);
             setError(null);
-            navigate('/sign-in')
-        }catch (e) {
+            await Swal.fire({
+                icon: 'success',
+                title: 'Sign Up Successful',
+                text: 'You have successfully signed up. Please sign in.',
+            });
+            navigate('/sign-in');
+        } catch (error) {
             setLoading(false);
             setError(error.message);
+            await Swal.fire({
+                icon: 'error',
+                title: 'Sign Up Error',
+                text: error.message,
+            });
         }
-    }
+    };
 
     return (
         <div className={'p-3 max-w-lg mx-auto'}>

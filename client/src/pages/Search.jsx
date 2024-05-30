@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import ListingItem from "../components/ListingItem.jsx";
+import axios from "axios";
 
 export default function Search() {
     const navigate = useNavigate();
@@ -48,18 +49,21 @@ export default function Search() {
             const fetchListings = async () => {
                 setLoading(true);
                 setShowMore(false);
-                const searchQuery = urlParams.toString();
-                const res = await fetch(`/api/listing/get?${searchQuery}`);
-                const data = await res.json();
-                if(data.length > 8){
-                    setShowMore(true);
-                }else {
-                    setShowMore(false);
+                try {
+                    const searchQuery = urlParams.toString();
+                    const res = await axios.get(`/api/listing/get?${searchQuery}`);
+                    const data = res.data;
+                    setShowMore(data.length > 8);
+                    setListings(data);
+                } catch (error) {
+                    console.error('Error fetching listings:', error);
+                } finally {
+                    setLoading(false);
                 }
-                setListings(data);
-                setLoading(false);
-            }
+            };
+
             fetchListings().then(r => console.log(r));
+
         }, [location.search]);
 
     const handleChange = (e) => {
@@ -101,14 +105,20 @@ export default function Search() {
         const urlParams = new URLSearchParams(location.search);
         urlParams.set('startIndex', String(startIndex));
         const searchQuery = urlParams.toString();
-        const res = await fetch(`/api/listing/get?${searchQuery}`);
-        const data = await res.json();
 
-        if(data.length < 9){
-            setShowMore(false);
+        try {
+            const res = await axios.get(`/api/listing/get?${searchQuery}`);
+            const data = res.data;
+
+            if (data.length < 9) {
+                setShowMore(false);
+            }
+            setListings([...listings, ...data]);
+        } catch (error) {
+            console.error('Error fetching listings:', error);
         }
-        setListings([...listings, ...data])
-    }
+    };
+
 
     return (
         <div className={'flex flex-col md:flex-row'}>

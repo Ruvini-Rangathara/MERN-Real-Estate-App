@@ -7,6 +7,8 @@ import "swiper/css/bundle";
 import {FaShare, FaMapMarkerAlt, FaBed, FaBath, FaParking, FaChair} from "react-icons/fa";
 import {useSelector} from "react-redux";
 import Contact from "../components/Contact.jsx";
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 export default function Listing() {
     SwiperCore.use([Navigation]);
@@ -18,27 +20,39 @@ export default function Listing() {
     const currentUser = useSelector((state) => state.user);
 
     const params = useParams();
+
     useEffect(() => {
         const fetchListing = async () => {
             try {
-                setLoading(true)
-                const response = await fetch(`/api/listing/get/${params.listingId}`);
-                const data = await response.json();
+                setLoading(true);
+                const response = await axios.get(`/api/listing/get/${params.listingId}`);
+                const data = response.data;
                 if (data.success === false) {
                     setError(true);
-                    setLoading(false)
+                    setLoading(false);
+                    await Swal.fire({
+                        icon: 'error',
+                        title: 'Fetch Listing Failed',
+                        text: data.message,
+                    });
                     return;
                 }
-                setListing(data)
-                setLoading(false)
-                setError(false)
+                setListing(data);
+                setLoading(false);
+                setError(false);
             } catch (error) {
                 setError(true);
-                setLoading(false)
+                setLoading(false);
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Fetch Listing Error',
+                    text: error.message,
+                });
             }
-        }
+        };
         fetchListing().then(r => console.log(r));
     }, [params.listingId]);
+
 
     return (
         <main>

@@ -3,6 +3,8 @@ import {Link, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import { signInStart, signInSuccess, signInFailure } from "../redux/user/userSlice.js";
 import OAuth from "../components/OAuth.jsx";
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 export default function SignIn() {
     const navigate = useNavigate();
@@ -24,37 +26,35 @@ export default function SignIn() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try{
-            // setLoading(true);
+        try {
+            // dispatch start action
             dispatch(signInStart());
-
-            const res = await fetch('/api/auth/signin', {
-                method: 'POST',
+            const response = await axios.post('/api/auth/signin', formData, {
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(formData)
             });
-            const data = await res.json();
+            const data = response.data;
             if (data.success === false) {
-                // setError(data.message);
-                // setLoading(false);
-
                 dispatch(signInFailure(data.message));
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Sign In Failed',
+                    text: data.message,
+                });
                 return;
             }
-            // setLoading(false)
-            // setError(null);
-
             dispatch(signInSuccess(data));
-            navigate('/home')
-        }catch (e) {
-            // setLoading(false);
-            // setError(error.message);
-
-            dispatch(signInFailure(e.message));
+            navigate('/home');
+        } catch (error) {
+            dispatch(signInFailure(error.message));
+            await Swal.fire({
+                icon: 'error',
+                title: 'Sign In Error',
+                text: error.message,
+            });
         }
-    }
+    };
 
     return (
         <div className={'p-3 max-w-lg mx-auto'}>
