@@ -12,6 +12,7 @@ import CreateListing from "./pages/CreateListing.jsx";
 import UpdateListing from "./pages/UpdateListing.jsx";
 import Listing from "./pages/Listing.jsx";
 import Search from "./pages/Search.jsx";
+import Payment from "./pages/Payment.jsx";
 
 function App() {
     const currentUser = useSelector((state) => state.user.currentUser);
@@ -33,6 +34,8 @@ function App() {
             <Route path="/home" element={<Home />} />
             <Route path="/search" element={<Search />} />
             <Route path="/listing/:listingId" element={<Listing />} />
+
+            <Route path="/payment" element={<Payment />} />
 
             <Route element={<PrivateRoute />} >
                 <Route path="/profile" element={<Profile />} />

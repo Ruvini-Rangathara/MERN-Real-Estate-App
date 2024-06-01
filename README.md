@@ -110,6 +110,7 @@ npm i dotenv
 npm i bcryptjs
 npm i jsonwebtoken
 npm i cookie-parser
+npm i stripe
 ```
 
 ### Frontend Dependencies
@@ -121,6 +122,9 @@ npm install @reduxjs/toolkit react-redux
 npm i redux-persist
 npm install firebase
 npm i swiper
+npm i @stripe/stripe.js
+npm install @stripe/react-stripe-js @stripe/stripe-js
+
 
 
 npm install -D @tailwindcss/line-clamp

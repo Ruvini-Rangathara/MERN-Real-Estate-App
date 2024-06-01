@@ -1,5 +1,11 @@
 import Listing from "../model/listing.model.js";
 import {errorHandler} from "../util/error.js";
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+import Stripe from 'stripe';
+const stripe = new Stripe(process.env.STRIPE_SECRET);
 
 export const createListing = async (req, res, next) => {
     try{
@@ -9,7 +15,6 @@ export const createListing = async (req, res, next) => {
         console.error(e.message)
     }
 }
-
 
 export const deleteListing = async (req, res, next) => {
     const listing = await Listing.findById(req.params.id);
@@ -27,7 +32,6 @@ export const deleteListing = async (req, res, next) => {
         next(e);
     }
 }
-
 
 export const updateListing = async (req, res, next) => {
     const listing = await Listing.findById(req.params.id);
@@ -58,7 +62,6 @@ export const getListing = async (req, res, next) => {
         next(e);
     }
 }
-
 
 export const getListings = async (req, res, next) => {
     try{
@@ -106,5 +109,22 @@ export const getListings = async (req, res, next) => {
     }catch (e) {
         console.error(e.message)
         next(e);
+    }
+}
+
+export const makePayment = async (req, res, next) => {
+    console.log('Making payment in controller...')
+    // make payment and if success show success message with Swal
+    try {
+        const { amount } = req.body;
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount: amount,
+            currency: 'usd',
+        });
+
+        res.status(200).json({ client_secret: paymentIntent.client_secret });
+    } catch (error) {
+        console.error('Error creating payment intent:', error);
+        res.status(500).json({ message: 'Failed to create payment intent' });
     }
 }
