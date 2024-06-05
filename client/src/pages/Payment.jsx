@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import { useLocation, Link } from "react-router-dom";
+import {useLocation, Link, useNavigate} from "react-router-dom";
 import Swal from "sweetalert2";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 const CheckoutForm = ({ listing }) => {
     console.log("listing : ", listing)
+    const navigate = useNavigate();
     const stripe = useStripe();
     const elements = useElements();
     const [error, setError] = useState(null);
@@ -16,7 +17,6 @@ const CheckoutForm = ({ listing }) => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         setLoading(true);
-
         const response = await fetch('/api/listing/payment', {
             method: 'POST',
             headers: {
@@ -26,15 +26,12 @@ const CheckoutForm = ({ listing }) => {
                 amount: listing.offer ? listing.discountPrice : listing.regularPrice,
             }),
         });
-
         const data = await response.json();
-
         const result = await stripe.confirmCardPayment(data.client_secret, {
             payment_method: {
                 card: elements.getElement(CardElement),
             },
         });
-
         if (result.error) {
             setError(result.error.message);
             await Swal.fire({
@@ -49,7 +46,9 @@ const CheckoutForm = ({ listing }) => {
                     icon: 'success',
                     title: 'Payment successful',
                     text: 'Thank you for your payment!',
-                });
+                }).then(
+                    navigate('/home')
+                )
             }
         }
         setLoading(false);

@@ -82,15 +82,15 @@ export default function Home() {
                         >
                         </div>
                     </SwiperSlide>
-                ))};
+                ))}
             </Swiper>
 
         {/*    listing results for offer, sale and rent*/}
-            <div className={'max-w-6xl mx-auto flex flex-col gap-8 my-10 '}>
+            <div className={'max-w-6xl mx-auto flex flex-col gap-8 my-10'}>
                 {/*///////////////////////////////////////////////////////////////////////*/}
                 {offerListings && offerListings.length > 0 && (
                     <div className={''}>
-                        <div className={'my-3'}>
+                        <div className={'my-3 mx-6'}>
                             <h2 className={'text-2xl font-semibold text-slate-600'}>Recent offers</h2>
                             <Link
                                 className={'text-sm text-blue-800 hover:underline'}
@@ -111,7 +111,7 @@ export default function Home() {
                 {/*///////////////////////////////////////////////////////////////////////*/}
                 {rentListings && rentListings.length > 0 && (
                     <div className={''}>
-                        <div className={'my-3'}>
+                        <div className={'my-3 mx-6'}>
                             <h2 className={'text-2xl font-semibold text-slate-600'}>Recent places for rent</h2>
                             <Link
                                 className={'text-sm text-blue-800 hover:underline'}
@@ -132,7 +132,7 @@ export default function Home() {
                 {/*///////////////////////////////////////////////////////////////////////*/}
                 {saleListings && saleListings.length > 0 && (
                     <div className={''}>
-                        <div className={'my-3'}>
+                        <div className={'my-3 mx-6'}>
                             <h2 className={'text-2xl font-semibold text-slate-600'}>Recent places for sale</h2>
                             <Link
                                 className={'text-sm text-blue-800 hover:underline'}
